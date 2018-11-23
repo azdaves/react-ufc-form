@@ -1,5 +1,9 @@
 import React, { Component } from "react";
 import "./App.css";
+import Search from "./components/Search"
+
+import Table from "./components/Table"
+
 
 const list = [
   {
@@ -82,11 +86,7 @@ const list = [
   }
 ];
 
-function isSearched(searchTerm) {
-  return function(item) {
-    return item.last_name.toLowerCase().includes(searchTerm.toLowerCase());
-  };
-}
+
 
 class App extends Component {
   constructor(props) {
@@ -94,7 +94,8 @@ class App extends Component {
 
     this.state = {
       list,
-      searchTerm: ""
+      searchTerm: "",
+      value: ""
     };
     this.onDismiss = this.onDismiss.bind(this);
     this.onSearchChange = this.onSearchChange.bind(this);
@@ -113,32 +114,21 @@ class App extends Component {
     const { searchTerm, list } = this.state;
 
     return (
-      <div className="App">
-        <form>
-          <input
-            type="text"
-            value={searchTerm}
-            onChange={this.onSearchChange}
-          />
-        </form>
-        {list.filter(isSearched(searchTerm)).map(item => (
-          <div key={item.id}>
-            <span>
-              <a href={item.thumbnail}>{item.last_name}</a>
-            </span>
-            <span>{item.first_name}</span>
-            <span>{item.weight_class}</span>
-            <span>{item.wins}</span>
-            <span>
-              <button onClick={() => this.onDismiss(item.id)} type="button">
-                Dismiss
-              </button>
-            </span>
-          </div>
-        ))}
+      <div className="page">
+      <div className="interactions">
+      <Search value={searchTerm} onChange={this.onSearchChange} >Search</Search>
       </div>
-    );
+      <Table list={list} pattern={searchTerm} onDismiss={this.onDismiss} />
+        </div>
+    )
   }
-}
+     
+};
+
+
+
+
+
+
 
 export default App;
